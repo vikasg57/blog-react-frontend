@@ -11,6 +11,7 @@ import { sendOtp, verifyOtp } from '../apis/auth'
 import {
   NotificationManager,
 } from "react-notifications";
+import { useDispatch, useSelector } from "react-redux";
 
 
 
@@ -21,12 +22,20 @@ export function Signup() {
     const [emailError, setEmailError] = useState(false)
     const [otpSent, setOtpSent] = useState(false)
 
+    const dispatch = useDispatch()
+
+    const data = useSelector(state => state.signup)
+
+
     function ValidateEmail(email) {
       if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)) {
         return true;
       }
       return false;
     }
+
+
+
     const handleChange = (event) => {
       
         setFields({
