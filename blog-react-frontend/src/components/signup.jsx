@@ -7,25 +7,35 @@ import FormControl from '@mui/material/FormControl'
 import FormLabel from '@mui/material/FormLabel'
 import FormHelperText from '@mui/material/FormHelperText'
 import { Button, Input, InputLabel } from '@mui/material'
-import { sendOtp, verifyOtp } from '../apis/auth'
 import {
   NotificationManager,
 } from "react-notifications";
 import { useDispatch, useSelector } from "react-redux";
-
-
-
+import { sendOtp, verifySignUp } from "../redux/signup/action";
+import CircularProgress from '@mui/material/CircularProgress';
+import Box from "@mui/material/Box";
+import {useNavigate} from 'react-router-dom';
 
 export function Signup() {
     const [fields, setFields] = useState({})
     const [email, setEmail] = useState({})
     const [emailError, setEmailError] = useState(false)
-    const [otpSent, setOtpSent] = useState(false)
+
+    const navigate = useNavigate()
 
     const dispatch = useDispatch()
 
     const data = useSelector(state => state.signup)
-
+    const {
+      otp_sent_response,
+      otp_sent,
+      otp_sent_loading,
+      loading,
+      error,
+      success,
+      otp_sent_error,
+      otpSentSuccess,
+    } = data;
 
     function ValidateEmail(email) {
       if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)) {
@@ -33,11 +43,8 @@ export function Signup() {
       }
       return false;
     }
-
-
-
+    
     const handleChange = (event) => {
-      
         setFields({
             ...fields,
             [event.target.name]: event.target.value
@@ -51,24 +58,24 @@ export function Signup() {
           }
         
     }
+
     const sendNotificationSuccess = (message) => {
       NotificationManager.success(message, "Sucess");
     };
+
      const sendNotificationFailure = (message) => {
        NotificationManager.error(message, "Sucess");
      };
 
 
-    const handleOtp =async () =>{
+    const handleOtp =() =>{
       if (ValidateEmail(email.email)) {
         setEmailError(false);
-        try {
-          const res = await sendOtp(email);
-          alert(res?.data?.message);
-          setOtpSent(true);
-          sendNotificationSuccess(res?.data?.message);
-           
-        } catch (err) {
+        dispatch(sendOtp(email));
+        if(otp_sent){
+          sendNotificationSuccess(otp_sent_response.message)
+        }  
+        if (otp_sent_error) {
           sendNotificationFailure("Please try again");
         }
       } else {
@@ -79,8 +86,9 @@ export function Signup() {
 
     const handleSubmit = async () =>{
         try{
-            const res = await verifyOtp(fields)
-            console.log(res?.data)
+            await dispatch(verifySignUp(fields));
+            navigate('/login')
+
         }
         catch(er){
           console.log(er)
@@ -94,7 +102,12 @@ export function Signup() {
         </Toolbar>
       </AppBar>
       <FormControl>
-        {!otpSent ? (
+        {otp_sent_loading ? (
+            <CircularProgress />
+        ) : (
+          <></>
+        )}
+        {!otp_sent ? (
           <>
             <TextField
               id=""

@@ -5,3 +5,6 @@ export const LOGOUT = "LOGOUT";
 export const SIGNUP_LOADING = "SIGNUP_LOADING";
 export const SIGNUP_SUCCESS = "SIGNUP_SUCCESS";
 export const SIGNUP_FAILURE = "SIGNUP_FAILURE";
+export const OTP_SENT = "OTP_SENT";
+export const OTP_SENT_ERROR = "OTP_SENT_ERROR";
+export const OTP_SENT_LOADING = "OTP_SENT_LOADING";
