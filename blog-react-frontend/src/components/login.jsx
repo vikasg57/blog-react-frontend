@@ -1,7 +1,8 @@
 import { AppBar, Button, TextField, Toolbar, Typography, FormControl, FormLabel, FormHelperText } from '@mui/material'
 import React, {useState} from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { logInApi } from '../apis/auth'
+import { login } from '../redux/login/action'
+
 
 
 export const Login = () => {
@@ -9,7 +10,7 @@ export const Login = () => {
     const [emailError, setEmailError] = useState(false)
 
     const dispatch = useDispatch()
-    const {isAuthenticated} = useSelector(state => state.auth)
+    const data = useSelector(state => state.login)
 
 
    const handleChange = (event) => {
@@ -27,8 +28,7 @@ export const Login = () => {
    };
 
    const handleSubmit = async () => {
-    const res = await logInApi(fields);
-    console.log(res.data)
+    dispatch(login(fields))
    }
   return (
     <>

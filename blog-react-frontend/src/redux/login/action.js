@@ -1,4 +1,5 @@
-import {logInApi} from '../../api/login';
+import {logInApi} from '../../apis/auth';
+import { LOGIN_FAILURE, LOGIN_LOADING, LOGIN_SUCCESS, LOGOUT } from '../constants';
 
 export const loginLoading = () => {
   return {
@@ -30,7 +31,9 @@ export const login = (payload) => async (dispatch) => {
     dispatch(loginLoading());
     try{
         const response = await logInApi(payload);
+        console.log(response);
         dispatch(loginSuccess(response.data));
+
     }
     catch(error){
         dispatch(loginFailure(error));

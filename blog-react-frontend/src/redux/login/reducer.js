@@ -1,3 +1,4 @@
+import { LOGIN_FAILURE, LOGIN_LOADING, LOGIN_SUCCESS, LOGOUT } from "../constants";
 
 const initialState = {
   Loading: false,
@@ -27,8 +28,8 @@ export const logInReducer = (store=initialState, {type, payload}) => {
                 Authenticated:true,
                 Loading:false,
                 failure:false,
-                token:payload.token,
-                name:payload.name,
+                token:payload.refresh[0],
+                name:payload.first_name,
                 error:null
             }
 
