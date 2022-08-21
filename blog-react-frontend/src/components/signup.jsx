@@ -20,6 +20,7 @@ export function Signup() {
     const [fields, setFields] = useState({})
     const [email, setEmail] = useState({})
     const [emailError, setEmailError] = useState(false)
+    const [fieldError, setFieldError] = useState(false);
 
     const navigate = useNavigate()
 
@@ -69,6 +70,7 @@ export function Signup() {
 
 
     const handleOtp =() =>{
+      
       if (ValidateEmail(email.email)) {
         setEmailError(false);
         dispatch(sendOtp(email));

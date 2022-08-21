@@ -8,10 +8,18 @@ import { login } from '../redux/login/action'
 export const Login = () => {
     const [fields, setFields] = useState({})
     const [emailError, setEmailError] = useState(false)
+    const [fieldError, setFieldError] = useState(false)
 
     const dispatch = useDispatch()
     const data = useSelector(state => state.login)
 
+    
+    function ValidateEmail(email) {
+      if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)) {
+        return true;
+      }
+      return false;
+    }
 
    const handleChange = (event) => {
      setFields({
@@ -28,7 +36,28 @@ export const Login = () => {
    };
 
    const handleSubmit = async () => {
-    dispatch(login(fields))
+
+    const keys = Object.keys(fields)
+    console.log(keys)
+
+    if(keys.length < 2 || fields.email == "" || fields.password == ""){
+      setFieldError(true)
+    }
+    else{
+       setEmailError(false);
+       setFieldError(false);
+       if(ValidateEmail(fields.email)){
+        setEmailError(false);
+          dispatch(login(fields))
+       }
+        else
+       {
+          setEmailError(true);
+       }
+       
+    }
+      
+  
    }
   return (
     <>
@@ -45,8 +74,14 @@ export const Login = () => {
           type="email"
           name="email"
           margin="normal"
+          error={emailError}
           onChange={handleChange}
         />
+        {emailError && (
+          <FormHelperText id="my-helper-text">
+            Invalid email address.
+          </FormHelperText>
+        )}
         <TextField
           id=""
           label="Password"
@@ -64,6 +99,11 @@ export const Login = () => {
         >
           Log In
         </Button>
+        {fieldError && (
+          <FormHelperText id="my-helper-text">
+            All Fields required
+          </FormHelperText>
+        )}
       </FormControl>
     </>
   );
