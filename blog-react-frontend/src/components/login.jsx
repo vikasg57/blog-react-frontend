@@ -7,6 +7,11 @@ import { logInApi } from '../apis/auth'
 export const Login = () => {
     const [fields, setFields] = useState({})
     const [emailError, setEmailError] = useState(false)
+
+    const dispatch = useDispatch()
+    const {isAuthenticated} = useSelector(state => state.auth)
+
+
    const handleChange = (event) => {
      setFields({
        ...fields,
@@ -57,7 +62,7 @@ export const Login = () => {
           margin="normal"
           onClick={handleSubmit}
         >
-          Send OTP
+          Log In
         </Button>
       </FormControl>
     </>

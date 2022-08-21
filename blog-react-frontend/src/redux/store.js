@@ -8,9 +8,11 @@ import {
 import { signUpReducer } from "./signup/reducer";
 
 import thunk from "redux-thunk";
+import { logInReducer } from "./login/reducer";
 
 export const rootreducer = combineReducers({
-  signup: signUpReducer
+  signup: signUpReducer,
+  login: logInReducer
 });
 
 export const store = createStore(
